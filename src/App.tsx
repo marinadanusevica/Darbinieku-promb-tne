@@ -558,9 +558,22 @@ export default function App() {
                       </label>
                       <input
                         type="text"
-                        required
                         value={formName}
-                        onChange={(e) => setFormName(e.target.value)}
+                        onChange={(e) => {
+                          const cleanValue = e.target.value
+                            .replace(/ā/g, 'a').replace(/Ā/g, 'A')
+                            .replace(/č/g, 'c').replace(/Č/g, 'C')
+                            .replace(/ē/g, 'e').replace(/Ē/g, 'E')
+                            .replace(/ģ/g, 'g').replace(/Ģ/g, 'G')
+                            .replace(/ī/g, 'i').replace(/Ī/g, 'I')
+                            .replace(/ķ/g, 'k').replace(/Ķ/g, 'K')
+                            .replace(/ļ/g, 'l').replace(/Ļ/g, 'L')
+                            .replace(/ņ/g, 'n').replace(/Ņ/g, 'N')
+                            .replace(/š/g, 's').replace(/Š/g, 'S')
+                            .replace(/ū/g, 'u').replace(/Ū/g, 'U')
+                            .replace(/ž/g, 'z').replace(/Ž/g, 'Z');
+                          setFormName(cleanValue);
+                        }}
                         placeholder="Vārds Uzvārds (piem. Jānis Bērziņš)"
                         className="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 text-xs text-slate-900 font-semibold focus:outline-none focus:border-indigo-500 focus:bg-white"
                       />
