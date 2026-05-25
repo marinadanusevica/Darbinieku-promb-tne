@@ -275,7 +275,22 @@ app.post("/api/absences", (req, res) => {
   try {
     const { employee_name, date_from, date_to, document_type, reason } = req.body;
 
-    if (!employee_name || !employee_name.trim()) {
+    // Автоматическая очистка латышских букв для предотвращения ошибок
+    const rawName = employee_name || "";
+    const cleanName = rawName
+      .replace(/ā/g, 'a').replace(/Ā/g, 'A')
+      .replace(/č/g, 'c').replace(/Č/g, 'C')
+      .replace(/ē/g, 'e').replace(/Ē/g, 'E')
+      .replace(/ģ/g, 'g').replace(/Ģ/g, 'G')
+      .replace(/ī/g, 'i').replace(/Ī/g, 'I')
+      .replace(/ķ/g, 'k').replace(/Ķ/g, 'K')
+      .replace(/ļ/g, 'l').replace(/Ļ/g, 'L')
+      .replace(/ņ/g, 'n').replace(/Ņ/g, 'N')
+      .replace(/š/g, 's').replace(/Š/g, 'S')
+      .replace(/ū/g, 'u').replace(/Ū/g, 'U')
+      .replace(/ž/g, 'z').replace(/Ž/g, 'Z');
+
+    if (!cleanName || !cleanName.trim()) {
       return res.status(400).json({ error: "Darbinieka vārds ir obligāts lauks." });
     }
     if (!date_from || !date_to) {
@@ -292,6 +307,13 @@ app.post("/api/absences", (req, res) => {
       INSERT INTO absences (employee_name, date_from, date_to, document_type, reason)
       VALUES (?, ?, ?, ?, ?)
     `);
+    const info = stmt.run(
+      cleanName.trim(),
+      date_from,
+      date_to,
+      document_type || "Cits",
+      reason.trim()
+    );
     const info = stmt.run(
       employee_name.trim(),
       date_from,
