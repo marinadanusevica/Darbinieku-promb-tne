@@ -290,13 +290,17 @@ app.post("/api/absences", (req, res) => {
       .replace(/ū/g, 'u').replace(/Ū/g, 'U')
       .replace(/ž/g, 'z').replace(/Ž/g, 'Z');
 
+    // Насильно переводим даты из формата DD/MM/YYYY в YYYY-MM-DD, если они пришли через косую черту
+    const finalDateFrom = date_from && date_from.includes("/") ? date_from.split("/").reverse().join("-") : date_from;
+    const finalDateTo = date_to && date_to.includes("/") ? date_to.split("/").reverse().join("-") : date_to;
+
     if (!cleanName || !cleanName.trim()) {
       return res.status(400).json({ error: "Darbinieka vārds ir obligāts lauks." });
     }
-    if (!date_from || !date_to) {
+    if (!finalDateFrom || !finalDateTo) {
       return res.status(400).json({ error: "Sākuma un beigu datumi ir obligāti." });
     }
-    if (new Date(date_from) > new Date(date_to)) {
+    if (new Date(finalDateFrom) > new Date(finalDateTo)) {
       return res.status(400).json({ error: "Sākuma datums nevar būt vēlāks par beigu datumu." });
     }
     if (!reason || !reason.trim()) {
@@ -309,15 +313,8 @@ app.post("/api/absences", (req, res) => {
     `);
     const info = stmt.run(
       cleanName.trim(),
-      date_from,
-      date_to,
-      document_type || "Cits",
-      reason.trim()
-    );
-    const info = stmt.run(
-      employee_name.trim(),
-      date_from,
-      date_to,
+      finalDateFrom,
+      finalDateTo,
       document_type || "Cits",
       reason.trim()
     );
