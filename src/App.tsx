@@ -540,7 +540,7 @@ export default function App() {
                     <p className="text-[10px] text-slate-400 mt-0.5">Lūdzu, aizpildiet visus informācijas laukus, lai pieteiktu prombūtni.</p>
                   </div>
 
-                  <form onSubmit={handleFormSubmit} className="space-y-3.5">
+                  <form onSubmit={handleFormSubmit} noValidate className="space-y-3.5">
                     {formStatus === "success" && (
                       <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 text-xs">
                         <span className="font-bold">Veiksmīgi reģistrēts!</span> Pieteikums veiksmīgi nodots datubāzē. Saraksts ir atjaunināts.
