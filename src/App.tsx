@@ -666,16 +666,27 @@ export default function App() {
                     <input
                       type="date"
                       value={fromDate}
-                      onChange={(e) => setFromDate(e.target.value)}
-                      className="bg-white border border-slate-205 px-2 py-0.5 text-[10.5px] font-semibold rounded text-slate-700 focus:outline-none"
-                    />
-                    <span className="text-xs font-bold text-slate-400">&rarr;</span>
-                    <input
-                      type="date"
-                      value={toDate}
-                      onChange={(e) => setToDate(e.target.value)}
-                      className="bg-white border border-slate-205 px-2 py-0.5 text-[10.5px] font-semibold rounded text-slate-700 focus:outline-none"
-                    />
+                      onChange={(e) => {
+                          const val = e.target.value;
+                          setFormDateFrom(val.includes("/") ? val.split("/").reverse().join("-") : val);
+                        }}
+                          className="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1 text-xs text-slate-900 font-semibold focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                          Līdz datumam
+                        </label>
+                        <input
+                          type="date"
+                          required
+                          value={formDateTo}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormDateTo(val.includes("/") ? val.split("/").reverse().join("-") : val);
+                          }}
+                          className="w-full bg-slate-50 border border-slate-200 rounded px-2.5 py-1 text-xs text-slate-900 font-semibold focus:outline-none"
+                        />
                   </div>
                 </div>
 
